@@ -7,7 +7,6 @@ This is a java application for a user Registration and Login system.
 
 import java.util.Scanner;
 
-
 public class userSystem {
 	private String userName;
 	private String password;
@@ -91,5 +90,30 @@ public class userSystem {
 			System.out.println("username or Password incorrect please try again");
 		}
 	}
+}
 
+class logIn {
+    public boolean checkUserName(String username) {
+        return username.contains("_") && username.length() <= 5;
+    }
+
+    public boolean checkPasswordComplexity(String password) {
+        boolean hasCap = false;
+        boolean hasNum = false;
+        boolean hasSpec = false;
+
+        for (int i = 0; i < password.length(); i++) {
+            char c = password.charAt(i);
+            if (Character.isUpperCase(c)){
+                hasCap = true;
+            }
+            if (Character.isDigit(c)){
+                hasNum = true;
+            }
+            if (!Character.isLetterOrDigit(c)){
+                hasSpec = true;
+            }
+        }
+        return hasCap && hasSpec && hasNum && password.length() >= 8;
+    }
 }
