@@ -116,4 +116,16 @@ class logIn {
         }
         return hasCap && hasSpec && hasNum && password.length() >= 8;
     }
+    public boolean checkCellPhoneNumber( String CellPhoneNumber) {
+        return CellPhoneNumber.matches("^\\+\\d{1,3}\\d{1,9}$");
+    }
+    public  String registerUser(String username , String password){
+        
+      if(!checkUserName(username)){
+       return "The username is incorrectly formatted. ";
+      } 
+      else if(!checkPasswordComplexity(password)){
+          return "The password does not meet the complexity required.";
+      }
+    }
 }
