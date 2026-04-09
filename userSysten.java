@@ -84,7 +84,7 @@ public class userSystem {
 		loginPass = sc.nextLine();
 
 		if(loginUser.equals(userName) && loginPass.equals(password)) {
-			System.out.println("Welcome back" + userName + "it ia great to see you again");
+			System.out.println("Welcome back " + userName + " it is great to see you again");
 		}
 		else {
 			System.out.println("username or Password incorrect please try again");
@@ -93,6 +93,7 @@ public class userSystem {
 }
 
 class logIn {
+
     public boolean checkUserName(String username) {
         return username.contains("_") && username.length() <= 5;
     }
@@ -104,28 +105,36 @@ class logIn {
 
         for (int i = 0; i < password.length(); i++) {
             char c = password.charAt(i);
-            if (Character.isUpperCase(c)){
-                hasCap = true;
-            }
-            if (Character.isDigit(c)){
-                hasNum = true;
-            }
-            if (!Character.isLetterOrDigit(c)){
-                hasSpec = true;
-            }
+            if (Character.isUpperCase(c)) hasCap = true;
+            if (Character.isDigit(c)) hasNum = true;
+            if (!Character.isLetterOrDigit(c)) hasSpec = true;
         }
         return hasCap && hasSpec && hasNum && password.length() >= 8;
     }
-    public boolean checkCellPhoneNumber( String CellPhoneNumber) {
-        return CellPhoneNumber.matches("^\\+\\d{1,3}\\d{1,9}$");
+
+    public boolean checkCellPhoneNumber(String cellNumber) {
+        return cellNumber.matches("^\\+\\d{1,3}\\d{1,9}$");
     }
-    public  String registerUser(String username , String password){
-        
-      if(!checkUserName(username)){
-       return "The username is incorrectly formatted. ";
-      } 
-      else if(!checkPasswordComplexity(password)){
-          return "The password does not meet the complexity required.";
-      }
+
+    public String registerUser(String username, String password) {
+        if (!checkUserName(username)) {
+            return "The username is incorrectly formatted.";
+        } else if (!checkPasswordComplexity(password)) {
+            return "The password does not meet the complexity requirements.";
+        } else {
+            return "The two above conditions have been met and the user has been registered successfully.";
+        }
+    }
+
+    public boolean loginUser(String username, String password, String storedUser, String storedPass) {
+        return username.equals(storedUser) && password.equals(storedPass);
+    }
+
+    public String returnLoginStatus(boolean isLoggedIn) {
+        if (isLoggedIn) {
+            return "A successful login";
+        } else {
+            return "A failed login";
+        }
     }
 }
