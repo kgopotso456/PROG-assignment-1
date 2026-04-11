@@ -8,88 +8,73 @@ This is a java application for a user Registration and Login system.
 import java.util.Scanner;
 
 public class userSystem {
-	private String userName;
-	private String password;
-	private String cellPhoneNumber;
 
-	public static void main(String[] args) {
-		String userName;
-		String password;
-		String cellPhoneNumber;
+    private static String userName;
+    private static String password;
+    private static String cellPhoneNumber;
 
-		Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        logIn loginTool = new logIn();
 
-		//********Registration************
-		System.out.println("*****Registration*****");
+        //********Registration************
+        System.out.println("*****Registration*****");
 
-		System.out.println("Your username must contain an underscore (_) and is no more than five characters long");
-		System.out.println("Create a username: ");
-		userName = sc.nextLine();
+        System.out.println("Your username must contain an underscore (_) and is no more than five characters long");
+        System.out.println("Create a username: ");
+        userName = sc.nextLine();
+        
+        // Check using the tool and print individual success message
+        if (loginTool.checkUserName(userName)) {
+            System.out.println("Username successfully captured");
+        } else {
+            System.out.println("Username is not correctly formatted; please ensure that your username contains an underscore and it is not more than 5 characters in length.");
+        }
 
-		System.out.println("Your password must be at least eight charaters long, contain a capital letter(s),a number(s), and a speacial character(s).");
-		System.out.println("Create a password: ");
-		password = sc.nextLine();
+        System.out.println("Your password must be at least eight characters long, contain a capital letter(s), a number(s), and a special character(s).");
+        System.out.println("Create a password: ");
+        password = sc.nextLine();
+        
+        // Check using the tool and print individual success message
+        if (loginTool.checkPasswordComplexity(password)) {
+            System.out.println("Password successfully captured");
+        } else {
+            System.out.println("Password is not correctly formatted; please ensure that your password contains at least eight characters, a number, and a special character.");
+        }
 
-		boolean hasCap = false;
-		boolean hasNum = false;
-		boolean hasSpec = false;
+        System.out.println("Your cell phone number must start with a country code e.g(+72) and the following digits must be less than 10");
+        System.out.println("Enter your cell phone number: ");
+        cellPhoneNumber = sc.nextLine();
 
-		for(int i = 0; i < password.length(); i++) {
-			char c = password.charAt(i);
+        if (loginTool.checkCellPhoneNumber(cellPhoneNumber)) {
+            System.out.println("cell phone number successfully captured");
+        } else {
+            System.out.println("Cell phone number is not correctly formatted or does not contain international code.");
+        }
 
-			if(Character.isUpperCase(c)) {
-				hasCap = true;
-			}
-			if(Character.isDigit(c)) {
-				hasNum = true;
-			}
-			if(!Character.isLetterOrDigit(c)) {
-				hasSpec = true;
-			}
-		}
+        System.out.println("\n" + loginTool.registerUser(userName, password));
 
-		System.out.println("Your cell phone number must start with a country code e.g(+72) and the following  digits must be less than 10");
-		System.out.println("Enter your cell phone number: ");
-		cellPhoneNumber = sc.nextLine();
+        //*******LOGIN********
+        System.out.println("\n*******LOGIN********");
 
-		//if statements
-		if(userName.contains("_") && userName.length() <= 5) {
-			System.out.println("Username successfully captured ");
-		}
-		else {
-			System.out.println("Username is not correctly formatted;please ensure that your username contains an underscore and it is not more than 5 characters in length.");
-		}
-		if(hasCap && hasNum && hasSpec && password.length() >= 8) {
-			System.out.println("Password successfully captured ");
-		}
-		else {
-			System.out.println("password is not correctly formatted; please ensure that your password conntains at least eight charaters, a number, and a special charater.");
-		}
-		if(cellPhoneNumber.matches("^\\+\\d{1,3}\\d{1,9}$")) {
-			System.out.println("cell phone number successfully captured");
-		}
-		else {
-			System.out.println("Cell phone number is not correctly formatted or does not contain international code.");
+        System.out.println("Enter your username:");
+        String loginUser = sc.nextLine();
 
-		}
-		//*******LOGIN********
-		System.out.println("*******LOGIN********");
+        System.out.println("Enter your password:");
+        String loginPass = sc.nextLine();
 
-		String loginUser;
-		System.out.println("Enter your username:");
-		loginUser = sc.nextLine();
+        // Uses the logIn class to verify the login
+        boolean isSuccess = loginTool.loginUser(loginUser, loginPass, userName, password);
+        
+        // This shows the "A successful login" or "A failed login" message
+        System.out.println(loginTool.returnLoginStatus(isSuccess));
 
-		String loginPass;
-		System.out.println("Enter your password:");
-		loginPass = sc.nextLine();
-
-		if(loginUser.equals(userName) && loginPass.equals(password)) {
-			System.out.println("Welcome back " + userName + " it is great to see you again");
-		}
-		else {
-			System.out.println("username or Password incorrect please try again");
-		}
-	}
+        if (isSuccess) {
+            System.out.println("Welcome back " + userName + " it is great to see you again");
+        } else {
+            System.out.println("Username or Password incorrect please try again");
+        }
+    }
 }
 
 class logIn {
@@ -105,9 +90,15 @@ class logIn {
 
         for (int i = 0; i < password.length(); i++) {
             char c = password.charAt(i);
-            if (Character.isUpperCase(c)) hasCap = true;
-            if (Character.isDigit(c)) hasNum = true;
-            if (!Character.isLetterOrDigit(c)) hasSpec = true;
+            if (Character.isUpperCase(c)){
+                hasCap = true;
+            }
+            if (Character.isDigit(c)){
+                hasNum = true;
+            }
+            if (!Character.isLetterOrDigit(c)){
+                hasSpec = true;
+            }
         }
         return hasCap && hasSpec && hasNum && password.length() >= 8;
     }
